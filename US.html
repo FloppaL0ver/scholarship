@@ -57,6 +57,13 @@
         font-size: 2rem;
         }
     }
+
+      @media (max-width: 767px) {
+    .column-toggles {
+      display: none;
+    }
+    }
+
     </style>
 
 </head>
@@ -97,14 +104,21 @@
 <div class="container mb-5">
   <h1 class="cool-title">US and International Scholarships</h1>
 
-  <!-- Column toggle checkboxes -->
+  <!-- Filter input -->
   <div class="mb-3">
+    <input type="text" id="filterInput" class="form-control" placeholder="Search scholarships...">
+  </div>
+
+
+  <!-- Column toggle checkboxes -->
+  <div class="mb-3 column-toggles">
     <label class="form-check-label me-2"><input class="form-check-input column-toggle" type="checkbox" data-column="0" checked> Scholarship Name</label>
     <label class="form-check-label me-2"><input class="form-check-input column-toggle" type="checkbox" data-column="3" checked> Type</label>
     <label class="form-check-label me-2"><input class="form-check-input column-toggle" type="checkbox" data-column="4" checked> How Much</label>
     <label class="form-check-label me-2"><input class="form-check-input column-toggle" type="checkbox" data-column="5" checked> Deadline</label>
     <label class="form-check-label me-2"><input class="form-check-input column-toggle" type="checkbox" data-column="6" checked> No additional application</label>
   </div>
+
 
   <!-- Desktop table -->
   <div class="table-responsive table-view shadow-sm rounded">
@@ -129,7 +143,7 @@
 </div>
 
 <script>
-// Example CSV data
+//CSV data
 const csvData = `Scholarship Name,College/University,Country,Type,How Much,Deadline,No additional application
 The Trailblazer Scholarship,Agnes Scott College,United States ,Merit,"$25,000/yr",January 15,
 Center for Women’s Entrepreneurial Leadership Scholarship,Babson College,United States ,Merit,25% off of tuition/year,,
@@ -255,6 +269,32 @@ toggles.forEach(toggle => {
     }
   });
 });
+
+// Filter functionality
+const filterInput = document.getElementById('filterInput');
+
+filterInput.addEventListener('input', () => {
+  const query = filterInput.value.toLowerCase();
+
+  results.data.forEach((row, index) => {
+    // Check if any relevant column contains the query
+    const searchableText = [
+      row['Scholarship Name'],
+      row['College/University'],
+      row['Country'],
+      row['Type']
+    ].join(' ').toLowerCase();
+
+    const match = searchableText.includes(query);
+
+    // Table row
+    tableBody.rows[index].style.display = match ? '' : 'none';
+
+    // Mobile card
+    cardContainer.children[index].style.display = match ? '' : 'none';
+  });
+});
+
 </script>
 
 <!-- Bootstrap JS -->
