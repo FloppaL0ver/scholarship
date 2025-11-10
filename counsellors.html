@@ -17,25 +17,47 @@
     .navbar-brand .yellow { color: #f5b82e; }
     .navbar-brand .green { color: #2e944b; }
 
-    /* Intro paragraph styling */
-    .intro-text {
-      background: linear-gradient(90deg, #6bb8ab, #d1078e);
-      color: white;
-      padding: 2rem 1rem;
-      border-radius: 12px;
-      text-align: center;
-      margin-bottom: 2rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      font-size: 1.2rem;
-      line-height: 1.6;
+    .cool-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 2rem;
+
+    /* Gradient text */
+    background: linear-gradient(90deg, #a7b4b8, #d4895d);
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent; 
+    background-clip: text; 
+    color: transparent; 
+
+    /* Shadow for depth */
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
     }
 
-    /* Responsive font size for smaller screens */
+    .cool-text {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 800;
+        font-size: 1.8rem;
+        background: linear-gradient(90deg, #ff7e5f, #feb47b);
+        background-clip: text; 
+        -webkit-background-clip: text; 
+        color: transparent; 
+        -webkit-text-fill-color: transparent;
+        text-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+        transition: transform 0.3s, text-shadow 0.3s;
+    }
+
+
+    .cool-text:hover {
+        transform: scale(1.1);
+        text-shadow: 4px 4px 12px rgba(0,0,0,0.3);
+    }
+
     @media (max-width: 767px) {
-      .intro-text {
-        font-size: 1rem;
-        padding: 1.5rem 1rem;
-      }
+        .cool-text {
+            font-size: 1.5rem;
+        }
     }
   </style>
 </head>
@@ -72,61 +94,32 @@
   </div>
 </nav>
 
+<div class="container my-5">
+  <h2 class="cool-title">Contact Information</h2>
+  
+  <div class="row justify-content-center">
+    <!-- Name Box -->
+    <div class="col-md-5 col-sm-10 mb-4">
+      <div class="card shadow-lg p-3 rounded" style="border-left: 6px solid #d1078e; background: #fff;">
+        <div class="card-body text-center">
+          <h5 class="cool-text">Maylina Maclang</h5>
+          <p class="card-text" style="font-size:1.2rem;">maya@tsis.ac.th</p>
+        </div>
+      </div>
+    </div>
 
-<!-- Intro Paragraph -->
-<div class="container">
-  <div class="intro-text">
-    Welcome to the Scholarships Explorer! This website is designed to help students easily find scholarships from colleges and universities around the world. 
-    Explore opportunities based on merit, need, and special programs, and discover the financial support you need to achieve your academic dreams. 
-    With our interactive table and mobile-friendly interface, staying informed about scholarship deadlines and eligibility has never been easier.
-  </div>
-</div>
-
-<!-- Image Box -->
-<div class="container mb-5">
-  <div class="image-box position-relative text-center">
-    <img src="picture.jpg" 
-         class="img-fluid rounded shadow" alt="Scholarship concept">
-    <div class="image-overlay position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center rounded">
-      <h2 class="overlay-text text-white">Find the Perfect Scholarship for You!</h2>
+    <!-- Email Box -->
+    <div class="col-md-5 col-sm-10 mb-4">
+      <div class="card shadow-lg p-3 rounded" style="border-left: 6px solid #6bb8ab; background: #fff;">
+        <div class="card-body text-center">
+          <h5 class="cool-text">Ketsirin Phoonsawat</h5>
+          <p class="card-text" style="font-size:1.2rem;">ketsirin@tsis.ac.th</p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<style>
-.image-box {
-  position: relative;
-}
-
-.image-box img {
-  width: 100%;
-  max-height: 400px;
-  object-fit: cover;
-}
-
-.image-overlay {
-  background: rgba(0, 0, 0, 0.4); /* semi-transparent overlay */
-  transition: background 0.3s;
-}
-
-.image-overlay:hover {
-  background: rgba(0, 0, 0, 0.2);
-}
-
-.overlay-text {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 2rem;
-  font-weight: 700;
-  text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
-}
-
-@media (max-width: 767px) {
-  .overlay-text {
-    font-size: 1.5rem;
-    padding: 0 1rem;
-  }
-}
-</style>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
