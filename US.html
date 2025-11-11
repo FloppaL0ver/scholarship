@@ -1,90 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scholarships</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scholarships</title>
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- PapaParse for CSV parsing -->
-    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <!-- PapaParse for CSV parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
-    <style>
-        body { background-color: #f8f9fa; }
+  <!-- SheetJS for XLSX reading -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
-        /* Navbar brand colors */
-        .navbar-brand .blue { color: #537fbe; }
-        .navbar-brand .red { color: #ea433b; }
-        .navbar-brand .yellow { color: #f5b82e; }
-        .navbar-brand .green { color: #2e944b; }
 
-        /* Cards for mobile */
-        .scholar-card { margin-bottom: 1rem; }
-        .scholar-card .card-header { font-weight: bold; }
-        .scholar-card p { margin-bottom: 0.25rem; }
-
-        /* Hide cards on desktop, show on mobile */
-        @media (min-width: 768px) { .card-view { display: none; } }
-        @media (max-width: 767px) { .table-view { display: none; } }
-    </style>
-
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
-
-    <style>
-    .cool-title {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 3rem;
-        font-weight: 700;
-        text-align: center;
-        margin-bottom: 2rem;
-
-        /* Gradient text */
-        background: linear-gradient(90deg, #a7b4b8, #d4895d);
-        -webkit-background-clip: text; 
-        -webkit-text-fill-color: transparent; 
-        background-clip: text; 
-        color: transparent; 
-
-        /* Shadow for depth */
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  <style>
+    body { 
+      margin: 0;
+      padding: 0;
+      background: black;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
     }
 
+    /* Starry background */
+    canvas#stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: black;
+    }
+
+        /* Navbar */
+    .navbar {
+      background: linear-gradient(90deg, #0d0d0d, #1a1a1a);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    }
+
+    .navbar-brand span {
+      color: #ffffff;
+      text-shadow: 0 0 8px rgba(255,255,255,0.6);
+    }
+
+    .nav-link {
+      color: #ccc;
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+
+    .nav-link:hover {
+      color: #fff;
+      text-shadow: 0 0 10px #00ffff;
+    }
+
+    /* Cool Title */
+    .cool-title {
+      font-size: 3rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 2rem;
+      background: linear-gradient(90deg, #00ffff, #ff00ff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      text-shadow: 2px 2px 8px rgba(0,255,255,0.4);
+    }
 
     @media (max-width: 767px) {
-        .cool-title {
+      .cool-title {
         font-size: 2rem;
-        }
+      }
+      .column-toggles {
+        display: none;
+      }
     }
 
-      @media (max-width: 767px) {
-    .column-toggles {
-      display: none;
-    }
+    /* Cards */
+    .card {
+      background: rgba(10, 10, 20, 0.9);
+      border-left: 6px solid #00ffff;
+      box-shadow: 0 4px 20px rgba(0,255,255,0.2);
+      margin-bottom: 1rem;
     }
 
-    </style>
+    .card-header {
+      font-weight: bold;
+      color: #00ffff;
+    }
 
+    .card-body p {
+      margin-bottom: 0.25rem;
+    }
+
+    /* Table adjustments */
+    .table-view table {
+      background: rgba(15,15,25,0.9);
+      color: #fff;
+    }
+
+    .table-view thead {
+      background-color: #111;
+    }
+
+    .table-view th, .table-view td {
+      vertical-align: middle;
+      color: #fff;
+    }
+
+    /* Cool text gradient for names in cards */
+    .cool-text {
+      font-weight: 800;
+      font-size: 1.8rem;
+      background: linear-gradient(90deg, #00ffff, #ff00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 2px 2px 8px rgba(0,255,255,0.4);
+      transition: transform 0.3s, text-shadow 0.3s;
+    }
+
+    .cool-text:hover {
+      transform: scale(1.1);
+      text-shadow: 4px 4px 12px rgba(0,255,255,0.6);
+    }
+
+    /* Responsive hiding of views */
+    @media (min-width: 768px) { .card-view { display: none; } }
+    @media (max-width: 767px) { .table-view { display: none; } }
+
+    /* Table adjustments for dark space theme */
+    /* Force table to be fully black inside and out */
+    .table-view table {
+      background-color: #000 !important; /* table background */
+      color: #fff !important;
+      border-color: #333 !important;
+    }
+
+    /* Table headers */
+    .table-view thead th {
+      background-color: #000 !important; /* header background */
+      color: #fff !important;
+      border-color: #333 !important;
+    }
+
+    /* Table body cells */
+    .table-view tbody td {
+      background-color: #000 !important; /* make each cell black */
+      color: #fff !important;
+      border-color: #333 !important;
+    }
+
+    /* Remove Bootstrap striping */
+    .table-view.table-striped tbody tr:nth-of-type(odd),
+    .table-view.table-striped tbody tr:nth-of-type(even) {
+      background-color: #000 !important;
+    }
+
+    /* Links inside table */
+    .table-view a {
+      color: #0ff !important;
+      text-decoration: none;
+    }
+
+    .table-view a:hover {
+      color: #fff !important;
+      text-shadow: 0 0 8px #0ff;
+    }
+
+
+
+  </style>
 </head>
 <body>
 
+<canvas id="stars"></canvas>
+
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark mb-4" style="background: linear-gradient(90deg, #6bb8ab, #d1078e);">
+<nav class="navbar navbar-expand-lg navbar-dark mb-4">
   <div class="container">
     <a class="navbar-brand" href="index.html">
-      <span class="blue" style="color:#e0f7fa;">S</span>
-      <span class="red" style="color:#ffccbc;">C</span>
-      <span class="yellow" style="color:#fff59d;">H</span>
-      <span class="green" style="color:#c5e1a5;">O</span>
-      <span class="blue" style="color:#e0f7fa;">L</span>
-      <span class="red" style="color:#ffccbc;">A</span>
-      <span class="yellow" style="color:#fff59d;">R</span>
-      <span class="green" style="color:#c5e1a5;">S</span>
-      <span class="blue" style="color:#e0f7fa;">H</span>
-      <span class="red" style="color:#ffccbc;">I</span>
-      <span class="yellow" style="color:#fff59d;">P</span>
-      <span class="green" style="color:#c5e1a5;">S</span>
+      <span>S</span><span>C</span><span>H</span><span>O</span><span>L</span><span>A</span><span>R</span><span>S</span><span>H</span><span>I</span><span>P</span><span>S</span>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,14 +192,13 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="US.html">US and International Scholarships</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link active" href="US.html">US and International Scholarships</a></li>
         <li class="nav-item"><a class="nav-link" href="counsellors.html">Contact</a></li>
       </ul>
     </div>
   </div>
 </nav>
-
 
 <div class="container mb-5">
   <h1 class="cool-title">US and International Scholarships</h1>
@@ -109,16 +208,13 @@
     <input type="text" id="filterInput" class="form-control" placeholder="Search scholarships...">
   </div>
 
-
   <!-- Column toggle checkboxes -->
   <div class="mb-3 column-toggles">
-    <label class="form-check-label me-2"><input class="form-check-input column-toggle" type="checkbox" data-column="0" checked> Scholarship Name</label>
     <label class="form-check-label me-2"><input class="form-check-input column-toggle" type="checkbox" data-column="3" checked> Type</label>
     <label class="form-check-label me-2"><input class="form-check-input column-toggle" type="checkbox" data-column="4" checked> How Much</label>
     <label class="form-check-label me-2"><input class="form-check-input column-toggle" type="checkbox" data-column="5" checked> Deadline</label>
     <label class="form-check-label me-2"><input class="form-check-input column-toggle" type="checkbox" data-column="6" checked> No additional application</label>
   </div>
-
 
   <!-- Desktop table -->
   <div class="table-responsive table-view shadow-sm rounded">
@@ -142,162 +238,133 @@
   <div class="card-view" id="cardContainer"></div>
 </div>
 
-<script>
-//CSV data
-const csvData = `Scholarship Name,College/University,Country,Type,How Much,Deadline,No additional application
-The Trailblazer Scholarship,Agnes Scott College,United States ,Merit,"$25,000/yr",January 15,
-Center for Women’s Entrepreneurial Leadership Scholarship,Babson College,United States ,Merit,25% off of tuition/year,,
-Gabelli Presidential Scholars,Boston College,United States ,Merit,"Full tuition, merit",11/1 EA,
-BU Trustee Scholarship,Boston University,United States ,Merit  ,Full Tuition - Undergraduate + Undergrad Fees,December 1,
-Wien Scholarship,Brandeis University,United States ,Merit/Need based,Full,,X
-Brown Fellows Program,Centre College,United States ,,Full tuition,,Nomination not required to apply
-Lincoln Scholars Program,Centre College,United States ,,Full-cost plus ,,Nomination not required to apply
-Grissom Scholars Program,Centre College,United States,,Full tuition,,Must be first-gen US citizen. Nomination not required to apply
-"Chinese University of Hong Kong, Shenzhen","Chinese University of Hong Kong, Shenzhen",Hong Kong,Merit,Full-tuition & accomodations (10 students),,X
-Kings Scholar,Dartmouth,United States ,Need based for minorities/students from impoverished nations,Full ,n/a (upon submission of Common app),
-John Belk Scholarship,Davidson College,United States ,Merit,"comprehensive funding (tuition, fees, room and board) plus special study stipends that allow you great flexibility in the on- and off-campus opportunities you choose to explore.",11/10 nomination deadline,
-Bryan Scholarship,Davidson College,United States ,Sports ,full tuition,"late sept nomination, application by Oct 15th",
-Karsh Scholarship,Duke  ,United States ,Need/merit based for international students,Full + ,Reg. Decision,
-Robertson Scholars Leadership Program,Duke / UNC,United States ,Merit/Need based,Full,11/15,
-Key Award,Elmira College,United States,,"USD 20,000",,"If a Key Award winner is eligible for a merit scholarship of a greater value at the time of admission to Elmira College, that scholarship supersedes the Elmira College Key Award. Each student you nominate should have a minimum academic grade point average of 3.0 (4.0 scale), demonstrate outstanding school and community leadership, and have an interest in an academic program offered by Elmira College."
-Oxford & Goizueta Scholarships,Emory University,United States ,Merit,1/2 to full tuition + study abroad,11/15,
-Fairleigh Dickinson U,Fairleigh Dickinson University,United States ,Merit,Partial tuition,,
-FIRST Robotics Scholarship,Harvey Mudd College,United States ,Merit,$10k/ year,,
-Junior Scholars Program,High Point University,United States ,,USD 2500,,
-Global Commitment Scholarship,Hollins College,United States ,Merit,Full tuition for 5 int'l students,December 1,
-International Presidential Scholarship,Huron at Western University,Canada,,"CAD 25,000",,
-Wells Scholars Program,Indiana University Bloomington,United States ,,Full-ride,,Students can self-nominate high school is not eligible to nominate.
-Bremer Landesbank Stiftung,Jacobs University,Germany,Merit,Full-tuition,Feb 1,x
-NCH Scholarship,New College of the Humanities,United Kingdom ,,GBP 2000,,Must be a nominating school.
-Park Scholarship,North Carolina State University,United States,,Full-ride,,Students can self-nominate. Must be US citizen or PR.
-Torch Scholars Program,Northeastern University,United States,,Unclear.,,Must be first-gen US citizen or PR from low-income household.
-NYUAD Nomination,NYU Abu Dhabi,UAE,,Full-need,,"Nomination is not required to apply, but is considered."
-Chancellor's Scholarship,Queen's University,Canada,,"CAD 36,000",,
-Rensselaer Medal,Rennselaer Polytechnic Institute,United States ,,"USD 25,000",,
-Computing Medal,Rochester Institute of Technology,United States ,,USD 8000,,Can nominate one male and one female student
-Innovation and Creativity Award,Rochester Institute of Technology,United States ,,USD 8000,,Can nominate one male and one female student
-Alfond Scholars Program,Rollins College,United States ,Merit,Full (no travel),11/1,
-Distinguished Scholars Award,Savannah College of Art & Design,United States,,"USD 20,000",,"GPA of 3.75, leadership, outstanding talent. To nominate a student, email the following information to nomination@scad.edu: Student's name, Institution name/city/country, Your name and position, Brief statement (100 words or less) explaining why you are nominating the student "
-Frances Larkin McCommon Scholarship,Savannah College of Art & Design,United States,,Full tuition,,Must demonstrate superior artistic achievement
-May and Paul Poetter Scholarship,Savannah College of Art & Design,United States,,Full tuition,,Must demonstrate superior academic achievement
-Kotzen Scholarship,Simmons College,United States ,Merit,Full/4yr/Additonal $3K per year,Dec 1,
-St. Michael's College Book Award,St. Michael's College,United States ,,Up to full-tuition,,
-Edmunds Scholars,Stetson University,United States,,Full-ride,,
-Student Sage Award,The Sage Colleges,United States,,"USD 10,000",,Must be US citizen
-International Leaders of Tomorrow & Donald A Wehrung,University of British Columbia,Canada,Merit/Need based/Int'l Students only.,Full / Meet 100% of need,Dec 1,
-Wehrung International Student Award,University of British Columbia,Canada,,Full need,,
-Vice Chancellor's International Undergraduate Excellence Scholarships,University of East Anglia,UK,Merit,25-50% tuition,June 22 (but apply earlier!),
-HeforShe IMPACT Champion Scholarships,University of Hong Kong,,,Full tuition + allowance,,
-HKU Belt and Road Scholarships,University of Hong Kong,,,Full tuition + allowance,,
-Hon Pin Entrance Scholarship for Nigerian Students,University of Hong Kong,,,Full tuition + allowance,,
-HKU Scholarship for Future Leaders,University of Hong Kong,,,Full tuition + allowance,,
-Banneker/Key Scholarship,University of Maryland - College Park,United States ,Merit,"Full-tuition,room, board",Nov 1,
-Meyerhoff Scholars Program,"University of Maryland, Baltimore County",United States,,"USD 10-22,000",,Must be US citizen
-Maroon or Gold Scholarship,"University of Minnesota, Twin Cities",United States ,"Merit - automatic consideration, but we can write Jenny Mealey to ask about a student getting a scholarship",Good for in-state tuition,Rolling admissions (earlier the better),
-Levine Scholarship,University of North Carolina - Charlotte,United States ,Merit,"Full, no travel",10/8 - nomination,Must be a US citizen or PR
-Morehead-Cain,"University of North Carolina, Chapel Hill",United States,,Full-ride,,Must be a nominating school. Students can self-nominate if they apply early.
-Richmond Scholars Program,University of Richmond,United States ,Merit,Full-tuition (25 students),December 1,X
-High School Awards,University of Rochester,United States ,,"USD 10-22,000",,Getting the award doesn't guarantee selection for scholarship
-Pearson International Scholarships,University of Toronto,Canada,Merit,Full (no travel),School Nomination submitted by 11/30,
-Acad. Excellence and Outstanding Leadership,University of Tulsa,United States,,"USD 25,000",,Nomination form available upon request
-Jefferson Scholars,University of Virginia,United States,,Full-ride,Dec. 1 Nomination,
-Hesburgh-Yusko Scholars Program,Universtiy of Notre Dame,United States ,"Merit - Demonstrated Leadership Ability, Distinguished Academic Achievement, Sincere Commitment to Service and Exemplary Moral Character","4 years X $25,000 $100,000 total",?,
-Ingram/Chancellors/Cornelius,Vanderbilt Univ,United States ,Merit,Full tuition + study abroad + additional $ based on need,January 1,
-Presidential Scholars Program,Villanova University,United States,,Full-ride,,
-Wagner,Wagner,United States ,Merit,Full tuition ,,
-Milepost One,Warren Wilson College,United States ,Merit & Need-based,Full-tuition,March 1,
-W&J Thrive Scholarship,Washington & Jefferson,United States ,Merit,Full-tuition (and lower ones),Feb 15,
-Danfourth,WashU St. Louis,United States ,Merit,Full tuition,11/15 - Nominations,
-Annika Rodriguez,WashU St. Louis,United States ,Merit,Full/partial tuition,,
-Honary Scholars in Arts/Sci,WashU St. Louis,United States ,Merit,Full/partial tuition,,
-Freeman Asian Scholarship,Wesleyan Univ,United States ,Merit,,,
-Wofford Scholars,Wofford College,United States ,Merit,"USD 10,000 and up",,
-Global Leader of Tomorrow,York University,Canada,Merit,"CAD 20,000",,
-International Circle of Scholars,York University,Canada,Merit,"CAD 15,000",,
-International Entrance Scholarship,York University,Canada,Merit,"CAD 35,000",,
-Presidential Fellows,"Miami University, Oxford",United States,Merit,Full or half,,`;
-
-// Parse CSV
-const results = Papa.parse(csvData, { header: true });
-
-// Desktop table
-const tableBody = document.querySelector('#scholarshipTable tbody');
-// Mobile cards container
-const cardContainer = document.querySelector('#cardContainer');
-
-results.data.forEach(row => {
-  // Table row
-  const tr = document.createElement('tr');
-  tr.innerHTML = `
-    <td>${row['Scholarship Name'] || ''}</td>
-    <td>${row['College/University'] || ''}</td>
-    <td>${row['Country'] || ''}</td>
-    <td>${row['Type'] || ''}</td>
-    <td>${row['How Much'] || ''}</td>
-    <td>${row['Deadline'] || ''}</td>
-    <td>${row['No additional application'] || ''}</td>
-  `;
-  tableBody.appendChild(tr);
-
-  // Card for mobile
-  const card = document.createElement('div');
-  card.className = 'card scholar-card';
-  card.innerHTML = `
-    <div class="card-header">${row['Scholarship Name'] || ''}</div>
-    <div class="card-body">
-      <p><strong>College/University:</strong> ${row['College/University'] || ''}</p>
-      <p><strong>Country:</strong> ${row['Country'] || ''}</p>
-      <p><strong>Type:</strong> ${row['Type'] || ''}</p>
-      <p><strong>How Much:</strong> ${row['How Much'] || ''}</p>
-      <p><strong>Deadline:</strong> ${row['Deadline'] || ''}</p>
-      <p><strong>No additional application:</strong> ${row['No additional application'] || ''}</p>
-    </div>
-  `;
-  cardContainer.appendChild(card);
-});
-
-// Column toggle functionality
-const toggles = document.querySelectorAll('.column-toggle');
-toggles.forEach(toggle => {
-  toggle.addEventListener('change', () => {
-    const colIndex = toggle.dataset.column;
-    const table = document.getElementById('scholarshipTable');
-    for (let row of table.rows) {
-      if (row.cells[colIndex]) {
-        row.cells[colIndex].style.display = toggle.checked ? '' : 'none';
-      }
-    }
-  });
-});
-
-// Filter functionality
-const filterInput = document.getElementById('filterInput');
-
-filterInput.addEventListener('input', () => {
-  const query = filterInput.value.toLowerCase();
-
-  results.data.forEach((row, index) => {
-    // Check if any relevant column contains the query
-    const searchableText = [
-      row['Scholarship Name'],
-      row['College/University'],
-      row['Country'],
-      row['Type']
-    ].join(' ').toLowerCase();
-
-    const match = searchableText.includes(query);
-
-    // Table row
-    tableBody.rows[index].style.display = match ? '' : 'none';
-
-    // Mobile card
-    cardContainer.children[index].style.display = match ? '' : 'none';
-  });
-});
-
-</script>
-
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// Starry background
+const canvas = document.getElementById('stars');
+const ctx = canvas.getContext('2d');
+let stars = [];
+const numStars = 200;
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+for (let i = 0; i < numStars; i++) {
+  stars.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    radius: Math.random() * 1.5 + 0.5,
+    alpha: Math.random(),
+    delta: Math.random() * 0.02
+  });
+}
+function animateStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let star of stars) {
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.radius, 0, 2 * Math.PI);
+    ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+    ctx.fill();
+    star.alpha += star.delta;
+    if (star.alpha <= 0 || star.alpha >= 1) star.delta *= -1;
+  }
+  requestAnimationFrame(animateStars);
+}
+animateStars();
+
+// Load and parse XLSX
+async function loadExcel() {
+  const response = await fetch("scholarships.xlsx");
+  const arrayBuffer = await response.arrayBuffer();
+  const workbook = XLSX.read(arrayBuffer, { type: "array" });
+  const firstSheetName = workbook.SheetNames[0];
+  const worksheet = workbook.Sheets[firstSheetName];
+  const data = XLSX.utils.sheet_to_json(worksheet, { defval: "", raw: false });
+
+  data.forEach(row => {
+    const val = row["Deadline"];
+    if (!isNaN(Date.parse(val))) {
+      const d = new Date(val);
+      const options = { month: "long", day: "numeric" };
+      row["Deadline"] = d.toLocaleDateString("en-US", options);
+    }
+  });
+
+  const tableBody = document.querySelector('#scholarshipTable tbody');
+  const cardContainer = document.querySelector('#cardContainer');
+
+  data.forEach((row, index) => {
+    let scholarshipNameCell = row["Scholarship Name"];
+    const cellAddress = `A${index + 2}`;
+    const cell = worksheet[cellAddress];
+    let linkHTML = scholarshipNameCell;
+    if (cell && cell.l && cell.l.Target) {
+      linkHTML = `<a href="${cell.l.Target}" target="_blank">${scholarshipNameCell}</a>`;
+    }
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${linkHTML || ''}</td>
+      <td>${row['College/University'] || ''}</td>
+      <td>${row['Country'] || ''}</td>
+      <td>${row['Type'] || ''}</td>
+      <td>${row['How Much'] || ''}</td>
+      <td>${row['Deadline'] || ''}</td>
+      <td>${row['No additional application'] || ''}</td>
+    `;
+    tableBody.appendChild(tr);
+
+    const card = document.createElement("div");
+    card.className = "card scholar-card";
+    card.innerHTML = `
+      <div class="card-header">${linkHTML || ''}</div>
+      <div class="card-body">
+        <p><strong>College/University:</strong> ${row['College/University'] || ''}</p>
+        <p><strong>Country:</strong> ${row['Country'] || ''}</p>
+        <p><strong>Type:</strong> ${row['Type'] || ''}</p>
+        <p><strong>How Much:</strong> ${row['How Much'] || ''}</p>
+        <p><strong>Deadline:</strong> ${row['Deadline'] || ''}</p>
+        <p><strong>No additional application:</strong> ${row['No additional application'] || ''}</p>
+      </div>
+    `;
+    cardContainer.appendChild(card);
+  });
+
+  const toggles = document.querySelectorAll('.column-toggle');
+  toggles.forEach(toggle => {
+    toggle.addEventListener('change', () => {
+      const colIndex = toggle.dataset.column;
+      const table = document.getElementById('scholarshipTable');
+      for (let row of table.rows) {
+        if (row.cells[colIndex]) {
+          row.cells[colIndex].style.display = toggle.checked ? '' : 'none';
+        }
+      }
+    });
+  });
+
+  const filterInput = document.getElementById('filterInput');
+  filterInput.addEventListener('input', () => {
+    const query = filterInput.value.toLowerCase();
+    data.forEach((row, index) => {
+      const searchableText = [
+        row['Scholarship Name'],
+        row['College/University'],
+        row['Country'],
+        row['Type']
+      ].join(' ').toLowerCase();
+      const match = searchableText.includes(query);
+      tableBody.rows[index].style.display = match ? '' : 'none';
+      cardContainer.children[index].style.display = match ? '' : 'none';
+    });
+  });
+}
+
+loadExcel();
+</script>
 </body>
 </html>

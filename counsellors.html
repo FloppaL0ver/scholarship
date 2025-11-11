@@ -9,49 +9,73 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
-    body { background-color: #f8f9fa; }
+    body { 
+      margin: 0;
+      padding: 0;
+      background: black;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+    }
 
-    /* Navbar brand colors */
-    .navbar-brand .blue { color: #537fbe; }
-    .navbar-brand .red { color: #ea433b; }
-    .navbar-brand .yellow { color: #f5b82e; }
-    .navbar-brand .green { color: #2e944b; }
+    /* Navbar */
+    .navbar {
+      background: linear-gradient(90deg, #0d0d0d, #1a1a1a);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    }
 
-    .cool-title {
-    font-family: 'Montserrat', sans-serif;
+    .navbar-brand span {
+      color: #ffffff;
+      text-shadow: 0 0 8px rgba(255,255,255,0.6);
+    }
+
+    .nav-link {
+      color: #ccc;
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+
+    .nav-link:hover {
+      color: #fff;
+      text-shadow: 0 0 10px #00ffff;
+    }
+
+    /* Title */
+  .cool-title {
     font-size: 3rem;
     font-weight: 700;
     text-align: center;
     margin-bottom: 2rem;
 
-    /* Gradient text */
-    background: linear-gradient(90deg, #a7b4b8, #d4895d);
-    -webkit-background-clip: text; 
-    -webkit-text-fill-color: transparent; 
-    background-clip: text; 
-    color: transparent; 
+    background: linear-gradient(90deg, #00ffff, #ff00ff);
 
-    /* Shadow for depth */
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    }
+    /* Cross-browser text gradient */
+    background-clip: text; /* standard for Firefox */
+    -webkit-background-clip: text; /* Chrome, Safari, Edge */
+    color: transparent; /* fallback */
+    -webkit-text-fill-color: transparent; /* Chrome, Safari, Edge */
 
-    .cool-text {
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 800;
-        font-size: 1.8rem;
-        background: linear-gradient(90deg, #ff7e5f, #feb47b);
-        background-clip: text; 
-        -webkit-background-clip: text; 
-        color: transparent; 
-        -webkit-text-fill-color: transparent;
-        text-shadow: 2px 2px 6px rgba(0,0,0,0.2);
-        transition: transform 0.3s, text-shadow 0.3s;
-    }
+    text-shadow: 2px 2px 8px rgba(0,255,255,0.4);
+  }
+
+
+    /* Card Text */
+  .cool-text {
+      font-weight: 800;
+      font-size: 1.8rem;
+
+      background: linear-gradient(90deg, #00ffff, #ff00ff);
+      -webkit-background-clip: text; /* required for Chrome/Safari */
+      -webkit-text-fill-color: transparent; /* required for Chrome/Safari */
+      background-clip: text; /* standard property for Firefox */
+      color: transparent; /* fallback */
+      
+      text-shadow: 2px 2px 8px rgba(0,255,255,0.4);
+      transition: transform 0.3s, text-shadow 0.3s;
+  }
 
 
     .cool-text:hover {
         transform: scale(1.1);
-        text-shadow: 4px 4px 12px rgba(0,0,0,0.3);
+        text-shadow: 4px 4px 12px rgba(0,255,255,0.6);
     }
 
     @media (max-width: 767px) {
@@ -59,26 +83,35 @@
             font-size: 1.5rem;
         }
     }
+
+    /* Cards */
+    .card {
+      background: rgba(10, 10, 20, 0.9);
+      border-left: 6px solid #00ffff;
+      box-shadow: 0 4px 20px rgba(0,255,255,0.2);
+    }
+
+    /* Starry background */
+    canvas#stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: black;
+    }
+
   </style>
 </head>
 <body>
+<canvas id="stars"></canvas>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark mb-4" style="background: linear-gradient(90deg, #6bb8ab, #d1078e);">
+<nav class="navbar navbar-expand-lg navbar-dark mb-4">
   <div class="container">
     <a class="navbar-brand" href="index.html">
-      <span class="blue" style="color:#e0f7fa;">S</span>
-      <span class="red" style="color:#ffccbc;">C</span>
-      <span class="yellow" style="color:#fff59d;">H</span>
-      <span class="green" style="color:#c5e1a5;">O</span>
-      <span class="blue" style="color:#e0f7fa;">L</span>
-      <span class="red" style="color:#ffccbc;">A</span>
-      <span class="yellow" style="color:#fff59d;">R</span>
-      <span class="green" style="color:#c5e1a5;">S</span>
-      <span class="blue" style="color:#e0f7fa;">H</span>
-      <span class="red" style="color:#ffccbc;">I</span>
-      <span class="yellow" style="color:#fff59d;">P</span>
-      <span class="green" style="color:#c5e1a5;">S</span>
+      <span>S</span><span>C</span><span>H</span><span>O</span><span>L</span><span>A</span><span>R</span><span>S</span><span>H</span><span>I</span><span>P</span><span>S</span>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,9 +119,9 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="US.html">US and International Scholarships</a></li>
-        <li class="nav-item"><a class="nav-link" href="counsellors.html">Contact</a></li>
+        <li class="nav-item"><a class="nav-link active" href="counsellors.html">Contact</a></li>
       </ul>
     </div>
   </div>
@@ -100,7 +133,7 @@
   <div class="row justify-content-center">
     <!-- Name Box -->
     <div class="col-md-5 col-sm-10 mb-4">
-      <div class="card shadow-lg p-3 rounded" style="border-left: 6px solid #d1078e; background: #fff;">
+      <div class="card shadow-lg p-3 rounded">
         <div class="card-body text-center">
           <h5 class="cool-text">Maylina Maclang</h5>
           <p class="card-text" style="font-size:1.2rem;">maya@tsis.ac.th</p>
@@ -110,7 +143,7 @@
 
     <!-- Email Box -->
     <div class="col-md-5 col-sm-10 mb-4">
-      <div class="card shadow-lg p-3 rounded" style="border-left: 6px solid #6bb8ab; background: #fff;">
+      <div class="card shadow-lg p-3 rounded">
         <div class="card-body text-center">
           <h5 class="cool-text">Ketsirin Phoonsawat</h5>
           <p class="card-text" style="font-size:1.2rem;">ketsirin@tsis.ac.th</p>
@@ -120,8 +153,52 @@
   </div>
 </div>
 
-
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// Starry background
+const canvas = document.getElementById('stars');
+const ctx = canvas.getContext('2d');
+
+let stars = [];
+const numStars = 200;
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+// Initialize stars
+for (let i = 0; i < numStars; i++) {
+  stars.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    radius: Math.random() * 1.5 + 0.5,
+    alpha: Math.random(),
+    delta: Math.random() * 0.02
+  });
+}
+
+// Animate stars
+function animateStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let star of stars) {
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.radius, 0, 2 * Math.PI);
+    ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+    ctx.fill();
+
+    star.alpha += star.delta;
+    if (star.alpha <= 0 || star.alpha >= 1) star.delta *= -1;
+  }
+  requestAnimationFrame(animateStars);
+}
+
+animateStars();
+</script>
+
 </body>
 </html>
